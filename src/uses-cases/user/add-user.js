@@ -1,4 +1,4 @@
-import { makeUser } from "../../models";
+import { makeUser } from "../../entities";
 export default function makeAddUser({ usersDb }) {
   return async function addUser({ userName, email, ...user }) {
     const userToInsert = await makeUser({ userName, email, ...user });

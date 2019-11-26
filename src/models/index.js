@@ -1,10 +1,3 @@
-import buildMakeUser from "./user";
-import mongoose from "mongoose";
-import { encryptPassword } from "../resources";
+import UserModel from "./user-model";
 
-const makeUser = buildMakeUser({
-  mongoose,
-  encryptPassword
-});
-
-export { makeUser };
+export { UserModel };

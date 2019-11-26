@@ -1,9 +1,18 @@
-export default function buildMakeUser({ mongoose, encryptPassword }) {
+export default function buildMakeUser({
+  makePhone,
+  UserModel,
+  encryptPassword,
+  isDateFormat,
+  isGender
+}) {
   return async function makeUser({
     firstName,
     lastName,
     email,
     userName,
+    gender,
+    birthDate,
+    phone,
     password,
     createdAt = new Date(Date.now()),
     updatedAt = new Date(Date.now())
@@ -24,45 +33,40 @@ export default function buildMakeUser({ mongoose, encryptPassword }) {
       throw { message: "Nombre de usuario requerido" };
     }
 
+    if (!phone) {
+      throw { message: "Teléfono requerido" };
+    }
+
+    if (!gender) {
+      throw { message: "Sexo requerido" };
+    }
+
+    if (!isGender(gender)) {
+      throw { message: "Genero inválido" };
+    }
+
+    if (!birthDate) {
+      throw { message: "Fecha de nacimiento requerida" };
+    }
+
+    if (!isDateFormat(birthDate)) {
+      throw { message: "Formato de fecha inválido" };
+    }
+
     if (!password) {
       throw { message: "Contraseña requerida" };
     }
 
-    const Schema = mongoose.Schema;
-
-    const userSchema = new Schema(
-      {
-        firstName: { type: String, required: [true] },
-        lastName: { type: String, required: [true] },
-        email: {
-          type: String,
-          required: [true]
-        },
-        userName: {
-          type: String,
-          required: [true]
-        },
-        password: { type: String, required: [true] },
-        status: false,
-        createdAt: Date,
-        updatedAt: Date
-      },
-      { versionKey: false }
-    );
-
-    let UserModel;
-
-    if (mongoose.models.users) {
-      UserModel = mongoose.model("users");
-    } else {
-      UserModel = mongoose.model("users", userSchema);
-    }
+    const phoneToInsert = makePhone({ ...phone });
 
     const userToInsert = new UserModel({
       firstName,
       lastName,
       email: email.toLowerCase(),
       userName: userName.toLowerCase(),
+      gender,
+      birthDate,
+      phone: phoneToInsert,
       password: await encryptPassword(password),
       status: false,
       createdAt,
