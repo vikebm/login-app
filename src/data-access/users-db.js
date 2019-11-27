@@ -3,12 +3,23 @@ export default function makeUsersDb({ makeDb }) {
     insert,
     findByUserName,
     findByEmail,
-    findAll
+    findAll,
+    update,
+    findByToken,
+    removeToken
   });
 
   async function insert(user) {
     await makeDb();
     await user.save();
+  }
+
+  async function update({ id: _id, ...user }) {
+    const db = await makeDb();
+    const result = await db
+      .collection("users")
+      .updateOne({ _id }, { $set: { ...user } });
+    return result.modifiedCount > 0 ? { id: _id, ...user } : null;
   }
 
   async function findByUserName(userName) {
@@ -59,5 +70,27 @@ export default function makeUsersDb({ makeDb }) {
       id,
       ...found
     }));
+  }
+
+  async function findByToken(token) {
+    const db = await makeDb();
+    const result = await db
+      .collection("users")
+      .find({ "token.value": token })
+      .project({ password: 0 });
+    const found = await result.toArray();
+    if (found.length === 0) {
+      return null;
+    }
+    const { _id: id, ...info } = found[0];
+    return { id, ...info };
+  }
+
+  async function removeToken({ id: _id }) {
+    const db = await makeDb();
+    const result = await db
+      .collection("users")
+      .updateOne({ _id }, { $unset: { token: "" } });
+    return result.modifiedCount > 0 ? "Token successfully removed" : null;
   }
 }

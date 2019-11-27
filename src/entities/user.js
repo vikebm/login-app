@@ -1,5 +1,6 @@
 export default function buildMakeUser({
   makePhone,
+  makeToken,
   UserModel,
   encryptPassword,
   isDateFormat,
@@ -13,6 +14,7 @@ export default function buildMakeUser({
     gender,
     birthDate,
     phone,
+    token = makeToken(),
     password,
     createdAt = new Date(Date.now()),
     updatedAt = new Date(Date.now())
@@ -67,6 +69,7 @@ export default function buildMakeUser({
       gender,
       birthDate,
       phone: phoneToInsert,
+      token,
       password: await encryptPassword(password),
       status: false,
       createdAt,

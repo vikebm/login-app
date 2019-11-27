@@ -25,6 +25,9 @@ const userSchema = new Schema(
       type: Object,
       required: [true]
     },
+    token: {
+      type: Object
+    },
     password: { type: String, required: [true] },
     status: false,
     createdAt: Date,
