@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import makeUsersDb from "./users-db";
 
-const dbPath = "mongodb://localhost:27017/test-db";
+const dbPath = process.env.PATH_DB;
 
 mongoose.connect(dbPath, {
   useNewUrlParser: true,

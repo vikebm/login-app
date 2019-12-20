@@ -1,5 +1,5 @@
 import { makeUser } from "../../entities";
-export default function makeAddUser({ usersDb }) {
+export default function makeAddUser({ usersDb, sendMailService }) {
   return async function addUser({ userName, email, ...user }) {
     const userToInsert = await makeUser({ userName, email, ...user });
     const existingUserName = await usersDb.findByUserName(userName);
@@ -12,6 +12,13 @@ export default function makeAddUser({ usersDb }) {
     if (existingEmail) {
       throw { code: 410, message: "Correo electrónico no disponible" };
     }
+
+    await sendMailService.sendMailWelcome(userToInsert.email);
+
+    await sendMailService.sendMailUserVerification(
+      userToInsert.email,
+      userToInsert.token.value
+    );
 
     await usersDb.insert(userToInsert);
   };

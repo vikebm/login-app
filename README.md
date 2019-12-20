@@ -1,5 +1,5 @@
 # Template for login App
-This is a template for the users module. It contains the method of registration, login and the list of the users paginates. Mongodb was used to store user information. The code is written in ES6
+This is a template for the users module. It contains the method of registration, login and the list of the users paginates, It also contains authentication methods with token, JWT and mailings. Mongodb was used to store user information. The code is written in ES6
 
 ### Dev Dependencies used
 - **Babel**: Used to compile the project, for babel plugins i use `@babel/cli`

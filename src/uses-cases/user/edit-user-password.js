@@ -1,7 +1,8 @@
 export default function makeEditPasswordUser({
     usersDb,
     encryptPassword,
-    isTokenValid
+    isTokenValid,
+    sendMailService
   }) {
     return async function editUserPassword({ token, password } = {}) {
       if (!token) {
@@ -11,11 +12,11 @@ export default function makeEditPasswordUser({
       const user = await usersDb.findByToken(token);
   
       if (!user) {
-        throw { code: 412, message: "Token inválido" };
+        throw { code: 414, message: "Token inválido" };
       }
   
       if (!isTokenValid(user.token)) {
-        throw { code: 412, message: "Token vencido" };
+        throw { code: 415, message: "Token vencido" };
       }
   
       const passwordEncode = await encryptPassword(password);

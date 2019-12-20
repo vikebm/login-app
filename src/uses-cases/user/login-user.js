@@ -1,7 +1,9 @@
+import { makeUser } from "../../entities";
 export default function makeLoginUser({
   usersDb,
   comparePassword,
-  generateJwt
+  generateJwt,
+  sendMailService
 }) {
   return async function loginUser({ userName, password } = {}) {
     if (!userName) {
@@ -22,6 +24,21 @@ export default function makeLoginUser({
 
     if (!match) {
       throw { code: 412, message: "Contraseña inválida" };
+    }
+
+    if (!user.status) {
+      const email = user.email;
+      const userToValidate = makeUser({ ...user });
+      await sendMailService.sendMailUserVerification(
+        email,
+        userToValidate.token.value
+      );
+
+      throw {
+        code: 416,
+        message:
+          "Usuario no activo, correo para validar cuenta enviado exitosamente"
+      };
     }
 
     delete user.password;

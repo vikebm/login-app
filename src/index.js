@@ -26,7 +26,7 @@ const httpServer = http.createServer(app);
 
 httpServer.listen(3000);
 
-figlet("Remeny", function(err, data) {
+figlet("Login APP", function(err, data) {
   if (err) {
     return;
   }

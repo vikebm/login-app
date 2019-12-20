@@ -35,6 +35,7 @@
     "express": "^4.17.1",
     "figlet": "^1.2.4",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.7.12"
+    "mongoose": "^5.7.12",
+    "nodemailer": "^6.3.1"
   }
 }
