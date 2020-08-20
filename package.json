@@ -30,7 +30,7 @@
     "rimraf": "^2.6.3"
   },
   "dependencies": {
-    "bcrypt": "^3.0.7",
+    "bcrypt": "^5.0.0",
     "cuid": "^2.1.6",
     "express": "^4.17.1",
     "figlet": "^1.2.4",
